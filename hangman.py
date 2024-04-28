@@ -17,10 +17,6 @@ def new_masked_word(a, b, c):
 
 def hangman():
 
-    root = tk.Tk()
-    root.title("hangman")
-    root.geometry("900x700")
-
     correct_word = guess_word()
     inc_letters = []
     inc_guesses = 0
@@ -28,9 +24,6 @@ def hangman():
     masked_word = ("_" * len(correct_word))
     guessed_word = ""
     test = "guess the word!"
-
-    label = tk.Label(root, text=test, fg="black")
-    label.pack()
     
     while guessed_word != correct_word:
         print(masked_word)
