@@ -36,7 +36,7 @@ first_input = get_input
 button = tk.Button(
     root,
     text="guess",
-    command=get_input, hangman
+    command=get_input
 )
 
 button.pack()
