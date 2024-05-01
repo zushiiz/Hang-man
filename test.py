@@ -1,35 +1,19 @@
-import tkinter as tk
+from tkinter import *
 
-def reset_variable():
-    global variable
-    variable = "hello"
-    print("Variable reset to:", variable)
+def update_image():
+    # Update the image here
+    pass  # Placeholder for image update logic
 
-num = 1
-def sum():
-    global num
-    num+=1
+root = Tk()
+root.geometry('400x400')  # Adjust dimensions as needed
+root.title('Image Display')
 
-print(num)
-sum()
-print(num)
+image = PhotoImage(file='h1.png')  # Replace 'your_image.png' with the path to your image file
 
-def function():
-    return "hello"
+label = Label(root, image=image)
+label.pack()  # Adjust positioning as needed
 
-variable = function()
+button = Button(root, text='Update Image', command=update_image)
+button.pack()  # Adjust positioning as needed
 
-# Create the main application window
-root = tk.Tk()
-root.title("Reset Variable")
-
-# Create a label to display the current value of the variable
-label = tk.Label(root, text="Variable: " + variable)
-label.pack()
-
-# Create a button to reset the variable
-button = tk.Button(root, text="Reset Variable", command=reset_variable)
-button.pack()
-
-# Run the Tkinter event loop
 root.mainloop()

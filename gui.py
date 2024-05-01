@@ -1,59 +1,84 @@
+from tkinter import *
 import tkinter as tk
 import random
 
 chosen_word = ""
+inc_letters = []
+inc_guesses = 0
+masked_word = ""
+    
+root = tk.Tk()
+root.title("hangman")
+root.geometry("700x500")
+
+speech_bubble = tk.Label(root, text="Welcome, input a letter or word!")
+first_input = tk.Entry(root)
+masked = tk.Label(root, text="")
+guessed_letters = tk.Label(root, text="Incorrect Letters:")
+
+image_path = "h1.png"
+image = tk.PhotoImage(file=image_path)
+
+
+image_label = tk.Label(root, image=image)
+image_label.pack()
 
 def guess_word():
     global chosen_word
+    global masked_word
+
+    global inc_letters
+    global inc_guesses
+
+    inc_letters = []
+    inc_guesses = 0
 
     with open("words.txt", "r", encoding="utf-8") as file:
         word = [line.strip() for line in file.readlines()]
         word_num = random.randint(0,len(word)-1)
         chosen_word = word[word_num]
 
+    masked_word = ("_"*len(chosen_word))
     print(chosen_word)
-    
-root = tk.Tk()
-root.title("hangman")
-root.geometry("700x500")
 
-title = tk.Label(root, text="Welcome, input a letter or word!")
-title.pack()
+    #display
+    masked.config(text=masked_word)
 
-first_input = tk.Entry(root)
-first_input.pack()
 
 def get_input():
     guess = first_input.get()
     return guess
 
-inc_letters = []
-inc_guesses = 0
-
-def inc_guess(a):
+def inc_guess(i, l, g):
     loss = 11
-    global inc_letters
-    global inc_guesses
 
-    inc_letters.append(a)
-    inc_guesses += 1
-    print(inc_letters)
-    print(inc_guesses)
+    l.append(i)
+    g += 1
+    print(l)
+    print(g)
 
-    if inc_guesses == loss:
+    if g == loss:
         print("you lost")
+    
+    #display
 
-def new_masked_word(correct, b, a):
-    updated_masked_word = list(a)
+    guessed_letters.config(text=f"Incorrect Letters:{l}")
+
+
+def new_masked_word(correct, b, mask):
+    global masked_word
+    
+    updated_masked_word = list(mask)
     for i in range(len(correct)):
         if correct[i] == b:
             updated_masked_word[i] = b
-    masked_word = "".join(updated_masked_word)   
+    masked_word = "".join(updated_masked_word)
+
+    # display
+    masked.config(text=masked_word)
 
 def button_command(correct):
     user_input = get_input().lower()
-
-    print(f"{masked_word} masked_word")
 
     guessed_word = ""
 
@@ -74,10 +99,8 @@ def button_command(correct):
         if user_input in correct:
             new_masked_word(correct, user_input, masked_word)
             
-            print(masked_word)
-
         else:
-            inc_guess(user_input)
+            inc_guess(user_input, inc_letters, inc_guesses)
 
             print(inc_guesses)
     print(inc_letters)
@@ -87,8 +110,6 @@ guess_button = tk.Button(
     text="guess",
     command=lambda: button_command(chosen_word)
 )
- 
-guess_button.pack()
 
 next_button = tk.Button(
     root,
@@ -97,6 +118,19 @@ next_button = tk.Button(
     
 )
 
-next_button.pack()
+def start_game():
+    speech_bubble.pack()
+    masked.pack()
+    guessed_letters.pack()
+
+    next_button.place(relx=0.95, rely=0.05, anchor="center")
+
+    first_input.place(relx=0.2, rely=0.4, anchor="center")
+    guess_button.place(relx=0.2, rely=0.5, anchor="center")
+
+    start_button.destroy()
+
+start_button = tk.Button(root, text="Start", command=start_game)
+start_button.place(relx=0.5, rely=0.5, anchor="center")
 
 root.mainloop()
