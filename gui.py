@@ -1,4 +1,3 @@
-from tkinter import *
 import tkinter as tk
 import random
 
@@ -6,22 +5,17 @@ chosen_word = ""
 inc_letters = []
 inc_guesses = 0
 masked_word = ""
-    
+score = 0
+
 root = tk.Tk()
 root.title("hangman")
 root.geometry("700x500")
 
-speech_bubble = tk.Label(root, text="Welcome, input a letter or word!")
+speech_bubble = tk.Label(root)
 first_input = tk.Entry(root)
 masked = tk.Label(root, text="")
 guessed_letters = tk.Label(root, text="Incorrect Letters:")
-
-image_path = "h1.png"
-image = tk.PhotoImage(file=image_path)
-
-
-image_label = tk.Label(root, image=image)
-image_label.pack()
+score_count = tk.Label(root, text=f"score:{score}")
 
 def guess_word():
     global chosen_word
@@ -43,27 +37,33 @@ def guess_word():
 
     #display
     masked.config(text=masked_word)
+    next_button.place(relx=0.95, rely=0.05, anchor="center")    
+    guess_button.place(relx=0.2, rely=0.5, anchor="center")
+    speech_bubble.config(text="Input a letter or word!")
 
 
 def get_input():
     guess = first_input.get()
     return guess
 
-def inc_guess(i, l, g):
-    loss = 11
+def inc_guess(i, l):
+    global inc_guesses
 
+    loss = 3
     l.append(i)
-    g += 1
-    print(l)
-    print(g)
-
-    if g == loss:
-        print("you lost")
+    inc_guesses += 1
+    if inc_guesses == loss:
+        speech_bubble.config(text="You lost")
+        next_game()
     
     #display
+    guessed_letters.config(text=l)
 
-    guessed_letters.config(text=f"Incorrect Letters:{l}")
 
+
+def next_game():
+    guess_button.place_forget()
+    next_button.place(relx=0.5, rely=0.5, anchor="center")
 
 def new_masked_word(correct, b, mask):
     global masked_word
@@ -78,21 +78,25 @@ def new_masked_word(correct, b, mask):
     masked.config(text=masked_word)
 
 def button_command(correct):
+    global score
+
     user_input = get_input().lower()
 
     guessed_word = ""
 
     if not user_input.isalpha():
-        print("[Invalid Input]")
-        print("Please try letters within the swedish alphabet")
+        print("[Invalid Input] - not recognized letter")
     elif user_input in inc_letters or user_input in masked_word:
-        print("[Invalid Input]")
-        print("You've already tried that letter")
+        print("[Invalid Input] - repeated letter")
     elif len(user_input) != 1:
         guessed_word = user_input
-        if guessed_word == correct:
-            print("win")
+        if guessed_word == correct:                                         #winning conditions
+            speech_bubble.config(text="You got it correct!")
+            masked.config(text=correct)
+            next_game()
+
         else:
+            
             print("inc")
             
     else:
@@ -100,10 +104,10 @@ def button_command(correct):
             new_masked_word(correct, user_input, masked_word)
             
         else:
-            inc_guess(user_input, inc_letters, inc_guesses)
+            inc_guess(user_input, inc_letters)
 
-            print(inc_guesses)
     print(inc_letters)
+    print(inc_guesses)
 
 guess_button = tk.Button(
     root,
@@ -115,7 +119,6 @@ next_button = tk.Button(
     root,
     text="next",
     command=guess_word
-    
 )
 
 def start_game():
@@ -128,7 +131,11 @@ def start_game():
     first_input.place(relx=0.2, rely=0.4, anchor="center")
     guess_button.place(relx=0.2, rely=0.5, anchor="center")
 
+    score_count.place(relx=0.05, rely=0.05, anchor="center")
+
     start_button.destroy()
+
+    guess_word()
 
 start_button = tk.Button(root, text="Start", command=start_game)
 start_button.place(relx=0.5, rely=0.5, anchor="center")
