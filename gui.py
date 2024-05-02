@@ -9,8 +9,6 @@ inc_words = 0
 masked_word = ""
 score = 0
 
-image_list = ["h0"] 
-
 root = tk.Tk()
 root.title("hangman")
 root.geometry("700x500")
@@ -22,15 +20,9 @@ gletter_title = tk.Label(root, text="Incorrect Letters:")
 guessed_letters = tk.Label(root)
 gword_title = tk.Label(root, text="Incorrect Words:")
 guessed_words = tk.Label(root, wraplength="200")
-
+iimage = tk.PhotoImage(file="h0.ppm").subsample(3, 3)
+dimage = tk.Label(root, image=iimage)
 score_count = tk.Label(root, text=f"score: {score}")
-
-image_path = image_list[0]+".ppm"
-
-h_image = tk.PhotoImage(file=image_path)
-resized_image = h_image.subsample(3, 3)
-
-displayed_image = tk.Label(root, image=resized_image)
 
 def guess_word():
     global chosen_word
@@ -39,23 +31,17 @@ def guess_word():
     global inc_letters
     global inc_guesses
     global words_list
-    
-    global image_path
-    global image_list
 
     inc_letters = []
     inc_guesses = 0
     words_list = []
-    image_list = ["h0", "h1", "h2", "h3", "h4", "h5", "h6", "h7", "h8", "h9", "h10"]
-
-    image_path = "h0.ppm"
 
     with open("words.txt", "r", encoding="utf-8") as file:
         word = [line.strip() for line in file.readlines()]
         word_num = random.randint(0,len(word)-1)
         chosen_word = word[word_num]
 
-    masked_word = ("_"*len(chosen_word))
+    masked_word = ("_ "*len(chosen_word))
     print(chosen_word)
 
     guessed_letters.config(text=inc_letters)
@@ -66,6 +52,13 @@ def guess_word():
     guess_button.place(relx=0.2, rely=0.5, anchor="center")
     speech_bubble.config(text="Input a letter or word!")
     first_input.delete(0, tk.END)
+    update_image(inc_guesses)
+
+def update_image(ig):
+    image_list = ["h0", "h1", "h2", "h3", "h4", "h5", "h6", "h7", "h8", "h9", "h10"]
+    new_image = tk.PhotoImage(file=image_list[ig]+".ppm").subsample(3, 3)
+    dimage.config(image=new_image)
+    dimage.image = new_image
 
 def get_input():
     guess = first_input.get()
@@ -73,21 +66,11 @@ def get_input():
 
 def inc_guess(i, l):
     global inc_guesses
-    global image_path
 
     loss = 10
     l.append(i)
     inc_guesses += 1
-
-    image_path=image_list[inc_guesses]+".ppm"
-
-    print(image_path)
-    h_image = tk.PhotoImage(file=image_path)
-    r_image = h_image.subsample(3, 3)
-    print(r_image)
-
-    new_image = tk.Label(root, image=r_image)
-    new_image.place(relx=0.5, rely=0.4, anchor="center")
+    update_image(inc_guesses)
 
     if inc_guesses == loss:
         speech_bubble.config(text=f"You lost! The correct word was {chosen_word}")
@@ -109,7 +92,7 @@ def inc_word(i, w):
 def next_game():
     guess_button.place_forget()
     first_input.delete(0, tk.END)
-    next_button.place(relx=0.5, rely=0.5, anchor="center")
+    next_button.place(relx=0.5, rely=0.7, anchor="center")
 
 def new_masked_word(correct, b, mask):
     global masked_word
@@ -185,8 +168,7 @@ def start_game():
     guess_button.place(relx=0.2, rely=0.5, anchor="center")
 
     score_count.place(relx=0.05, rely=0.05, anchor="center")
-
-    displayed_image.place(relx=0.5, rely=0.4, anchor="center")
+    dimage.place(relx=0.5, rely=0.4, anchor="center")
 
     start_button.destroy()
 
