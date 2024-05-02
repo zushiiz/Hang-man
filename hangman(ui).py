@@ -47,7 +47,7 @@ def guess_word():
     guessed_letters.config(text=inc_letters)
     guessed_words.config(text=words_list)
 
-    masked.config(text=masked_word)
+    masked.config(text=add_spacing(masked_word))
     next_button.place(relx=0.95, rely=0.05, anchor="center")    
     guess_button.place(relx=0.2, rely=0.5, anchor="center")
     speech_bubble.config(text="Input a letter or word!")
@@ -94,6 +94,17 @@ def next_game():
     first_input.delete(0, tk.END)
     next_button.place(relx=0.5, rely=0.7, anchor="center")
 
+def add_spacing(current):
+    ret = f"{current[0]}"
+
+    for i in range(1, len(current)):
+        if current[i] == "_" and current[i - 1] == "_":
+            ret += f" {current[i]}"
+        else:
+            ret += current[i]
+
+    return ret
+
 def new_masked_word(correct, b, mask):
     global score
     global masked_word
@@ -112,7 +123,7 @@ def new_masked_word(correct, b, mask):
         next_game()
 
     # display
-    masked.config(text=masked_word)
+    masked.config(text=add_spacing(masked_word))
 
 def button_command(correct):
     global score
