@@ -4,7 +4,7 @@ import tkinter as tk
 root = tk.Tk()
 
 # Load the image
-image_path = "34.ppm"
+image_path = "guy.ppm"
 image = tk.PhotoImage(file=image_path)
 
 # Resize the image (optional)
