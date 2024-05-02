@@ -19,7 +19,7 @@ masked = tk.Label(root)
 gletter_title = tk.Label(root, text="Incorrect Letters:")
 guessed_letters = tk.Label(root)
 gword_title = tk.Label(root, text="Incorrect Words:")
-guessed_words = tk.Label(root, wraplength="200", bg="SystemWindow")
+guessed_words = tk.Label(root, wraplength="200")
 
 score_count = tk.Label(root, text=f"score: {score}")
 
@@ -46,13 +46,11 @@ def guess_word():
     guessed_letters.config(text=inc_letters)
     guessed_words.config(text=words_list)
 
-    #display
     masked.config(text=masked_word)
     next_button.place(relx=0.95, rely=0.05, anchor="center")    
     guess_button.place(relx=0.2, rely=0.5, anchor="center")
     speech_bubble.config(text="Input a letter or word!")
     first_input.delete(0, tk.END)
-
 
 def get_input():
     guess = first_input.get()
@@ -61,20 +59,19 @@ def get_input():
 def inc_guess(i, l):
     global inc_guesses
 
-    loss = 3
+    loss = 10
     l.append(i)
     inc_guesses += 1
     if inc_guesses == loss:
         speech_bubble.config(text=f"You lost! The correct word was {chosen_word}")
         next_game()
     
-    #display
     guessed_letters.config(text=l)
 
 def inc_word(i, w):
     global inc_words
 
-    loss = 3
+    loss = 2
     w.append(i)
     inc_words += 1
     if inc_words == loss:
@@ -82,7 +79,6 @@ def inc_word(i, w):
         next_game()
     guessed_words.config(text=w)
     
-
 def next_game():
     guess_button.place_forget()
     first_input.delete(0, tk.END)
@@ -120,6 +116,9 @@ def button_command(correct):
             speech_bubble.config(text="You got it correct!")
             masked.config(text=correct)
             next_game()
+            score += 1
+            score_count.config(text=f"Score: {score}")
+
         else:
             inc_word(user_input, words_list)
 
@@ -131,7 +130,6 @@ def button_command(correct):
 
         first_input.delete(0, tk.END)
     
-
 guess_button = tk.Button(
     root,
     text="guess",
