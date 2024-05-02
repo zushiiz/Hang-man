@@ -41,7 +41,7 @@ def guess_word():
         word_num = random.randint(0,len(word)-1)
         chosen_word = word[word_num]
 
-    masked_word = ("_ "*len(chosen_word))
+    masked_word = ("_"*len(chosen_word))
     print(chosen_word)
 
     guessed_letters.config(text=inc_letters)
@@ -81,7 +81,7 @@ def inc_guess(i, l):
 def inc_word(i, w):
     global inc_words
 
-    loss = 2
+    loss = 3
     w.append(i)
     inc_words += 1
     if inc_words == loss:
@@ -95,6 +95,7 @@ def next_game():
     next_button.place(relx=0.5, rely=0.7, anchor="center")
 
 def new_masked_word(correct, b, mask):
+    global score
     global masked_word
     
     updated_masked_word = list(mask)
@@ -106,6 +107,8 @@ def new_masked_word(correct, b, mask):
     if masked_word == chosen_word:
         print("[Condition] - Win")
         speech_bubble.config(text="You won")
+        score += 1
+        score_count.config(text=f"Score: {score}")
         next_game()
 
     # display
