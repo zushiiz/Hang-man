@@ -1,20 +1,26 @@
 import tkinter as tk
 
-# Create a tkinter window
+def update_image():
+    # Update the PhotoImage object with a new image
+    new_image = tk.PhotoImage(file="h2.ppm")
+    label.config(image=new_image)
+    # Keep a reference to the image to prevent it from being garbage collected
+    label.image = new_image
+
+# Create the Tkinter window
 root = tk.Tk()
+root.title("Image Update Example")
 
-# Load the image
-image_path = "guy.ppm"
-image = tk.PhotoImage(file=image_path)
+# Load the initial image
+image = tk.PhotoImage(file="h0.ppm")
 
-# Resize the image (optional)
-# You can adjust these values to resize the image as per your requirements
-# For example, to resize to 200x200 pixels, set width=200 and height=200
-resized_image = image.subsample(3, 3)  # Example: Resize by a factor of 2
-
-# Create a label to display the image
-label = tk.Label(root, image=resized_image)  # Adjust width and height as needed
+# Create a Label to display the image
+label = tk.Label(root, image=image)
 label.pack()
 
-# Run the tkinter event loop
+# Button to trigger image update
+update_button = tk.Button(root, text="Update Image", command=update_image)
+update_button.pack()
+
+# Keep the Tkinter event loop running
 root.mainloop()
