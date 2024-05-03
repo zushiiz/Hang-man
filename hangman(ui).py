@@ -31,7 +31,9 @@ def guess_word():
     global inc_letters
     global inc_guesses
     global words_list
+    global inc_words
 
+    inc_words = 0
     inc_letters = []
     inc_guesses = 0
     words_list = []
@@ -190,5 +192,11 @@ def start_game():
 
 start_button = tk.Button(root, text="Start", command=start_game)
 start_button.place(relx=0.5, rely=0.5, anchor="center")
+
+def on_enter(event=None):
+    guess_button.invoke()
+
+root.bind('<Return>', on_enter
+          )
 
 root.mainloop()

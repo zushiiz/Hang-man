@@ -41,8 +41,6 @@ mixer
 whistle
 stethoscope
 stopwatch
-tape recorder
-chess pieces
 paintbrush
 tongs
 wrench
@@ -64,12 +62,8 @@ thermos
 compass
 shovel
 toothpaste
-paint roller
-staple remover
 whisk
 grater
-tissue box
-extension cord
 microscope
 carton
 clock
